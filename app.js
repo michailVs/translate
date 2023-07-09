@@ -10,12 +10,17 @@ try {
     let arr = []
     a.innerText = 'Перевод: '
     answer = answer['def']
-    answer.map(s => {
-      for (const i in s['tr']) {
-        arr.push(s['tr'][i]['text'])
-      }
-    })
-    a.innerText += arr.join(', ')
+    if (answer.length !== 0) {
+      answer.map(s => {
+        for (const i in s['tr']) {
+          arr.push(s['tr'][i]['text'])
+        }
+      })
+      a.innerText += arr.join(', ')
+    }
+    else {
+      a.innerText += ' отсутствует.'
+    }
   }
   btn.addEventListener('click', () => {
     a.innerText = ''
