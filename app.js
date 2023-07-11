@@ -3,12 +3,13 @@ const main = document.querySelector('.main')
 const input = document.querySelector('.input')
 const btn = document.querySelector('.btn')
 const a = document.querySelector('.a')
+const revers = document.querySelector('.revers')
 try {
   async function translate(leng, sting) {
     let answer = await fetch(`https://dictionary.yandex.net/api/v1/dicservice.json/lookup?key=${API}&lang=${leng}&text=${sting}`)
     .then(answer => answer.json())
     let arr = []
-    a.innerText = 'Перевод: '
+    a.innerText = ''
     answer = answer['def']
     if (answer.length !== 0) {
       answer.map(s => {
@@ -22,11 +23,31 @@ try {
       a.innerText += ' отсутствует.'
     }
   }
+  function singleWord(string) {
+    if(string.trim().split(' ').length > 0 && string.trim().split(' ') < 2) {
+      return string.trim()
+    } else {
+      let s = string.trim().split(' ')
+      return s[0]
+    }
+  }
   btn.addEventListener('click', () => {
     a.innerText = ''
-    translate(document.querySelector('select').value, input.value.trim())
+    if (input.value.trim().length > 0) {
+      translate(document.querySelector('select').value, singleWord(input.value))
+    } else {
+      return a.innerText = 'Input your word'
+    }
   })
-  createSelect()
+  revers.addEventListener('click', () => {
+    if (a.textContent.length > 0) {
+      document.querySelector('select').value = document.querySelector('select').value.split('-').reverse().join('-')
+      input.value = a.textContent.split(', ')[0]
+      translate(document.querySelector('select').value, input.value)
+    } else {
+      return
+    }
+  })
 } catch (e) {
   throw new Error(e)
 }
